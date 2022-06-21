@@ -31,6 +31,7 @@ const isToday = (version:Version) => {
   }
 }
 const createVersionString = (microPrefix = '', micro = 0) => {
+  console.log('createVersionString', microPrefix)
   const now = new Date()
   return `v${now.getFullYear()}.${now.getMonth() + 1}.${now.getDate()}-${microPrefix}${micro}`
 }
