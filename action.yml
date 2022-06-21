@@ -1,0 +1,17 @@
+name: 'CALVER'
+description: 'Wrapper for calver-cli'
+inputs:
+  prev:
+    description: "The previous version in the format of 'vYYYY.MM.DD-MICRO'; example: 'v2020.12.24-3'"
+    default: ""
+    required: false
+  microPrefix:
+    description: 'Optional prefix to the "MICRO", ex: "v2021.01.15-prefix.1" - warn: cannot contain dashes'
+    default: ""
+    required: false
+outputs:
+  version:
+    description: 'The generated calendar version string'
+runs:
+  using: 'node16'
+  main: 'index.js'
