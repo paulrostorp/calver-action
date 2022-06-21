@@ -9,6 +9,10 @@ inputs:
     description: 'Optional prefix to the "MICRO", ex: "v2021.01.15-prefix.1" - warn: cannot contain dashes'
     default: ""
     required: false
+  shouldShowDot:
+    description: 'Wether to show a dot between the prefix and the micro, default true'
+    default: "true"
+    required: false
 outputs:
   version:
     description: 'The generated calendar version string'

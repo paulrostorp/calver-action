@@ -30,20 +30,24 @@ const isToday = (version:Version) => {
     return false
   }
 }
-const createVersionString = (microPrefix = '', micro = 0) => {
+interface Opts {shouldShowDot:boolean}
+const createVersionString = (microPrefix = '', micro = 0, {
+  shouldShowDot
+}:Opts) => {
   const now = new Date()
-  return `v${now.getFullYear()}.${now.getMonth() + 1}.${now.getDate()}-${microPrefix}${micro}`
+  const dot = (shouldShowDot && microPrefix !== '') ? '.' : ''
+  return `v${now.getFullYear()}.${now.getMonth() + 1}.${now.getDate()}-${microPrefix}${dot}${micro}`
 }
 
-export const getVersion = (prev:string, microPrefix:string) => {
+export const getVersion = (prev:string, microPrefix:string, opts:Opts = { shouldShowDot: true }) => {
   if (prev !== '') {
     const previousVersion = parseVersionString(prev, microPrefix)
     if (previousVersion && isToday(previousVersion)) {
-      return createVersionString(microPrefix, previousVersion.micro + 1)
+      return createVersionString(microPrefix, previousVersion.micro + 1, opts)
     } else {
-      return createVersionString(microPrefix)
+      return createVersionString(microPrefix, undefined, opts)
     }
   } else {
-    return createVersionString(microPrefix)
+    return createVersionString(microPrefix, undefined, opts)
   }
 }
