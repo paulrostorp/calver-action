@@ -9045,7 +9045,6 @@ const isToday = (version) => {
     }
 };
 const createVersionString = (microPrefix = '', micro = 0) => {
-    console.log('createVersionString', microPrefix);
     const now = new Date();
     return `v${now.getFullYear()}.${now.getMonth() + 1}.${now.getDate()}-${microPrefix}${micro}`;
 };
@@ -9056,11 +9055,11 @@ const getVersion = (prev, microPrefix) => {
             return createVersionString(microPrefix, previousVersion.micro + 1);
         }
         else {
-            return createVersionString();
+            return createVersionString(microPrefix);
         }
     }
     else {
-        return createVersionString();
+        return createVersionString(microPrefix);
     }
 };
 
@@ -9071,9 +9070,7 @@ const getVersion = (prev, microPrefix) => {
 try {
     const prev = core.getInput('prev');
     const microPrefix = core.getInput('microPrefix');
-    console.log('Got args', prev, microPrefix);
     const version = getVersion(prev, microPrefix);
-    console.log('Got version', version);
     core.setOutput('version', version);
     // Get the JSON webhook payload for the event that triggered the workflow
     const payload = JSON.stringify(github.context.payload, undefined, 2);

@@ -31,7 +31,6 @@ const isToday = (version:Version) => {
   }
 }
 const createVersionString = (microPrefix = '', micro = 0) => {
-  console.log('createVersionString', microPrefix)
   const now = new Date()
   return `v${now.getFullYear()}.${now.getMonth() + 1}.${now.getDate()}-${microPrefix}${micro}`
 }
@@ -42,9 +41,9 @@ export const getVersion = (prev:string, microPrefix:string) => {
     if (previousVersion && isToday(previousVersion)) {
       return createVersionString(microPrefix, previousVersion.micro + 1)
     } else {
-      return createVersionString()
+      return createVersionString(microPrefix)
     }
   } else {
-    return createVersionString()
+    return createVersionString(microPrefix)
   }
 }
