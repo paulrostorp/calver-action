@@ -8983,6 +8983,23 @@ module.exports = require("zlib");
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__nccwpck_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__nccwpck_require__.o(definition, key) && !__nccwpck_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__nccwpck_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
 /******/ 	(() => {
 /******/ 		// define __esModule on exports
@@ -9005,6 +9022,11 @@ var __webpack_exports__ = {};
 "use strict";
 // ESM COMPAT FLAG
 __nccwpck_require__.r(__webpack_exports__);
+
+// EXPORTS
+__nccwpck_require__.d(__webpack_exports__, {
+  "isTrue": () => (/* binding */ isTrue)
+});
 
 // EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
 var core = __nccwpck_require__(2186);
@@ -9044,22 +9066,23 @@ const isToday = (version) => {
         return false;
     }
 };
-const createVersionString = (microPrefix = '', micro = 0) => {
+const createVersionString = (microPrefix = '', micro = 0, { shouldShowDot }) => {
     const now = new Date();
-    return `v${now.getFullYear()}.${now.getMonth() + 1}.${now.getDate()}-${microPrefix}${micro}`;
+    const dot = (shouldShowDot && microPrefix !== '') ? '.' : '';
+    return `v${now.getFullYear()}.${now.getMonth() + 1}.${now.getDate()}-${microPrefix}${dot}${micro}`;
 };
-const getVersion = (prev, microPrefix) => {
+const getVersion = (prev, microPrefix, opts = { shouldShowDot: true }) => {
     if (prev !== '') {
         const previousVersion = parseVersionString(prev, microPrefix);
         if (previousVersion && isToday(previousVersion)) {
-            return createVersionString(microPrefix, previousVersion.micro + 1);
+            return createVersionString(microPrefix, previousVersion.micro + 1, opts);
         }
         else {
-            return createVersionString(microPrefix);
+            return createVersionString(microPrefix, undefined, opts);
         }
     }
     else {
-        return createVersionString(microPrefix);
+        return createVersionString(microPrefix, undefined, opts);
     }
 };
 
@@ -9067,10 +9090,24 @@ const getVersion = (prev, microPrefix) => {
 
 
 
+/**
+ * Checks if something is true - useful for string environment variables
+ * @param val string | boolean | undefined
+ * @returns boolean
+ */
+const isTrue = (val) => {
+    if (typeof val === 'string') {
+        return val.toLowerCase() === 'true';
+    }
+    else {
+        return !!val;
+    }
+};
 try {
     const prev = core.getInput('prev');
     const microPrefix = core.getInput('microPrefix');
-    const version = getVersion(prev, microPrefix);
+    const shouldShowDot = isTrue(core.getInput('shouldShowDot'));
+    const version = getVersion(prev, microPrefix, { shouldShowDot });
     core.setOutput('version', version);
     // Get the JSON webhook payload for the event that triggered the workflow
     const payload = JSON.stringify(github.context.payload, undefined, 2);
