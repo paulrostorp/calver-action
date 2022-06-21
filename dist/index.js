@@ -9070,7 +9070,9 @@ const getVersion = (prev, microPrefix) => {
 try {
     const prev = core.getInput('prev');
     const microPrefix = core.getInput('microPrefix');
+    console.log('Got args', prev, microPrefix);
     const version = getVersion(prev, microPrefix);
+    console.log('Got version', version);
     core.setOutput('version', version);
     // Get the JSON webhook payload for the event that triggered the workflow
     const payload = JSON.stringify(github.context.payload, undefined, 2);
